@@ -73,4 +73,19 @@ class PersonRepositoryImplTest {
             list.forEach(person -> System.out.println(person.getFirstName()));
         });
     }
+
+    @Test
+    void testFilterOnName() {
+        personRepository.findAll()
+                .filter(person -> person.getFirstName().equals("Marc"))
+                .subscribe(person -> System.out.println(person.getLastName()));
+    }
+
+    @Test
+    void testGetById () {
+        Mono<Person> marcMono = personRepository.findAll().filter(person -> person.getFirstName().equals("Marc"))
+                .next();
+
+        marcMono.subscribe(person -> System.out.println(person.getFirstName()));
+    }
 }

@@ -1,10 +1,12 @@
 package com.drifter.reactive_spring_sb.repositories;
 
 import com.drifter.reactive_spring_sb.domain.Person;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +26,18 @@ class PersonRepositoryImplTest {
         assertTrue(foundPersonMono.hasElement().block());
     }
 
+    @Test
+    void testGetByIdNotFoundStepVerifier() {
+        Mono<Person> foundPersonMono = personRepository.getById(999);
+
+        StepVerifier.create(foundPersonMono).expectNextCount(0).verifyComplete();
+
+        foundPersonMono.subscribe(person -> {
+            System.out.println(person.getFirstName());
+        });
+    }
+
+    @Disabled
     @Test
     void testGetByIdNotFound() {
         Mono<Person> foundPersonMono = personRepository.getById(999);
